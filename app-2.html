@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>My FirstApp</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.23/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/css/esri.css">
+    <style>
+        html, body { height: 100%; width: 100%; margin: 0; padding: 0; }
+        #map{
+            padding:0;
+        }
+        #tools{
+            position: absolute; top: 0; left: 0; right: 0; height: 0; background-color:darkgray; height: 100px;
+        }
+    </style>
+    <script src="https://js.arcgis.com/3.23/"></script>
+    <script>
+        function main() {
+            var map;
+             require([
+      "esri/map",
+      "esri/layers/VectorTileLayer",
+      "esri/layers/ArcGISTiledMapServiceLayer", 
+      "esri/layers/WebTiledLayer",
+      "esri/SpatialReference",
+
+      "dojo/domReady!"
+    ], function(Map, VectorTileLayer,ArcGISTiledMapServiceLayer,WebTiledLayer,) {
+
+      var map = new Map("map", {
+        center:[document.getElementById("lon").value, document.getElementById("lat").value],
+        zoom: document.getElementById("size").value
+      });
+
+      //The URL referenced in the constructor may point to a style url JSON (as in this sample)
+      //or directly to a vector tile service
+       var sel_obj = document.getElementById("myMap");
+       var index = sel_obj.selectedIndex;
+      var vtlayer;
+switch(sel_obj.options[index].text)
+    {
+        case "1":
+              vtlayer = new VectorTileLayer("https://www.arcgis.com/sharing/rest/content/items/92c551c9f07b4147846aae273e822714/resources/styles/root.json");
+            break;
+        case "2":
+           vtlayer = new WebTiledLayer("https://${subDomain}.tile.thunderforest.com/cycle/${level}/${col}/${row}.png", {
+           "copyright": 'Maps © <a href="http://www.thunderforest.com">Thunderforest</a>, Data © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+          "id": "OpenCycleMap",
+          "subDomains": ["a", "b", "c"]
+        });
+            break;
+        case "3":
+       vtlayer = new ArcGISTiledMapServiceLayer("https://services.arcgisonline.com/arcgis/rest/services/Polar/Arctic_Imagery/MapServer");
+            break;
+    }
+      map.addLayer(vtlayer);
+    });
+
+        }
+    </script>
+</head>
+
+<body >
+<div id="map"
+     data-dojo-type="dijit/layout/ContentPane"
+     data-dojo-props="region:'center'"
+     style="padding:0;height: 100%;width: 100%;z-index: 20">
+</div>
+<div id="tools" >
+    <a >请输入经度:</a>
+    <textarea id="lon" style="height: 20px"></textarea>
+    <a>请输入纬度:</a>
+    <textarea id="lat" style="height: 20px"></textarea>
+    <a>请输入选择级别:（1-18）</a>
+    <textarea id="size" style="height: 20px;width: 50px"></textarea>
+    <a>请输入底图</a>
+    <select id="myMap">
+        <option value="volvo">1</option>
+        <option value="saab">2</option>
+        <option value="opel">3</option>
+    </select>
+
+    <button id="take" onclick="main()">显示地图</button>
+</div>
+</body>
+</html>
