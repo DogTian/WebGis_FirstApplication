@@ -7,7 +7,8 @@
     <title>Simple Map</title>
     <!--<script src="https://dogtian.github.io/WebGis_FirstApplication/jquery-2.1.4.min.js"></script>-->
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <link rel="stylesheet" href="http://localhost/arcgis_js_api/library/3.9/js/esri/css/esri.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/css/esri.css">
+    <script src="https://js.arcgis.com/3.23/"></script>
     <style>
         html,body,.parent{height: 100%; overflow: hidden;}
         .top{position: absolute; top: 0; left: 303px; right: 0; height: 0; background-color: lightblue; height: 70px}
@@ -141,7 +142,6 @@
             color:black;
         }
     </style>
-    <script src="http://localhost/arcgis_js_api/library/3.9"></script>
 
     <!--地图显示与相关操作-->
     <script>
@@ -480,7 +480,7 @@
                 document.getElementById("mapCpare").style.display="block";
                 document.getElementById("mapCpare").innerHTML+= "<iframe id='mymap'  name='aa' width='100%' height='100%'" +
                         "allowtransparency='true' style='background-color=transparent' frameborder='0'  scrolling='no'></iframe> "
-                self.frames['aa'].location.href="http://127.0.0.1:8020/compare.html";
+                self.frames['aa'].location.href="https://dogtian.github.io/WebGis_FirstApplication/demo3/compare.html";
                 alert(1);
                 isClose=true;
             }else{
@@ -501,7 +501,7 @@
                 document.getElementById("mapCpare").style.display="block";
                 document.getElementById("mapCpare").innerHTML+= "<iframe id='mymap'  name='aa' width='100%' height='100%'" +
                         "allowtransparency='true' style='background-color=transparent' frameborder='0'  scrolling='no'></iframe> "
-                self.frames['aa'].location.href="http://127.0.0.1:8020/swipe.html";
+                self.frames['aa'].location.href="https://dogtian.github.io/WebGis_FirstApplication/demo3/swipe.html";
                 isEnd=true;
             }else{
                 document.getElementById("map").style.display="block";
