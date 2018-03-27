@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="http://localhost/arcgis_js_api/library/3.9/js/esri/css/esri.css">
+    <title> 地图卷帘 </title>
+    <style type="text/css">
+    </style>
+</head>
+<script src="http://localhost/arcgis_js_api/library/3.9"></script>
+<script>
+    require(["esri/map", "dojo/domReady!","esri/layers/ArcGISDynamicMapServiceLayer"], function(Map,ArcGISDynamicMapServiceLayer) {
+        var map1 = new Map("up", {
+            basemap: "topo",
+            center: [-98, 38],
+            zoom: 7
+        });
+
+        var dynamicMapServiceLayer = new esri.layers.ArcGISDynamicMapServiceLayer(
+                "http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Petroleum/KGS_OilGasFields_Kansas/MapServer"
+        );
+
+        var map2=new Map("on", {
+            center: [-98, 38],
+            zoom: 7
+        });
+
+        map2.addLayer(dynamicMapServiceLayer);
+
+        var evnt1,event2;
+        //鼠标移入map1事件
+        map1.on("mouse-over",function(){
+            event1=map1.on("extent-change",function(){
+                map2.setExtent(map1.extent);
+            });
+        });
+
+        //鼠标移出map1事件
+        map1.on("mouse-out",function(){
+            if(event1!=null)
+            {
+                //event1.remove();
+                event1.remove();
+                event1=null;
+            }
+        });
+
+        //鼠标移入map2事件
+        map2.on("mouse-over",function(){
+            event2=map2.on("extent-change",function(){
+                map1.setExtent(map2.extent);
+            });
+        });
+
+        //鼠标移出map2事件
+        map2.on("mouse-out",function(){
+            if(event2!=null)
+            {
+                event2.remove();
+                event2=null;
+            }
+        })
+    });
+</script>
+<body>
+<div id="up" style="position:absolute;width: 100%;height: 100%;z-index: 1;"></div>
+<div id="on" style="position:absolute;width: 100%;height: 100%;background-color: rgba(255,255,255,0.1);z-index: 2;"></div>
+<div id="in" style="position:absolute;right:0px;width: 2px;height: 100%;background-color: black;z-index: 3;"></div>
+<div id="btn" style="position:absolute;right:-1px;top:49.5%;width: 10px;height: 20px;background-color: black;z-index: 4;"></div>
+<script type="text/javascript">
+    var div = document.getElementById("btn");
+    var dragFlag = false;
+    var x,y;
+
+    div.onmousedown = function (e) {
+        e = e || window.event;
+        x = e.clientX - div.offsetLeft;
+        y = e.clientY - div.offsetTop;
+        dragFlag = true;
+    };
+
+    document.onmousemove = function (e) {
+        if (dragFlag) {
+            e = e || window.event;
+            div.style.left = e.clientX - x + "px";
+            document.getElementById("in").style.left=e.clientX - x +5+ "px";
+            document.getElementById("on").style.width=e.clientX - x + "px";
+        }
+    };
+
+    document.onmouseup = function (e) {
+        dragFlag = false;
+    };
+
+</script>
+</body>
+</html>

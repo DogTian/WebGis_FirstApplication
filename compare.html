@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
+    <title>map compare</title>
+    <link rel="stylesheet" href="http://localhost/arcgis_js_api/library/3.9/js/esri/css/esri.css">
+    <style>
+        html, body, #map1,#map2 {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #FFF;
+            overflow: hidden;
+            font-family: "Trebuchet MS";
+        }
+        #map1,#map2{
+            float:left;
+            width: 49.5%;
+        }
+        #map1{
+            border-right: 2px solid #999;
+        }
+    </style>
+    <script src="http://localhost/arcgis_js_api/library/3.9"></script>
+    <script>
+        var map1,map2;
+        require([
+                    "esri/map", "dojo/dom","dojo/on",
+                    "dojo/domReady!"],function(Map,dom,on) {
+                    map1 = new esri.Map("map1", {
+                        center: [121.48, 31.25],
+                        zoom: 8,
+                        basemap: "streets"
+                    });
+
+                    map2 = new esri.Map("map2", {
+                        center: [121.48, 31.25],
+                        zoom: 8,
+                        basemap: "streets"
+                    });
+
+                    var evnt1,event2;
+                    //鼠标移入map1事件
+                    map1.on("mouse-over",function(){
+                        event1=map1.on("extent-change",function(){
+                            map2.setExtent(map1.extent);
+                        });
+                    });
+
+                    //鼠标移出map1事件
+                    map1.on("mouse-out",function(){
+                        if(event1!=null)
+                        {
+                            //event1.remove();
+                            event1.remove();
+                            event1=null;
+                        }
+                    });
+
+                    //鼠标移入map2事件
+                    map2.on("mouse-over",function(){
+                        event2=map2.on("extent-change",function(){
+                            map1.setExtent(map2.extent);
+                        });
+                    });
+
+                    //鼠标移出map2事件
+                    map2.on("mouse-out",function(){
+                        if(event2!=null)
+                        {
+                            event2.remove();
+                            event2=null;
+                        }
+                    })
+                });
+    </script>
+</head>
+<body id="map">
+<div id="map1"></div>
+<div id="map2"></div>
+</body>
+</html>
